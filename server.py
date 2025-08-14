@@ -17,12 +17,10 @@ def get_songs():
     return jsonify(getSongs()["dict"]) 
 
 
-
 @app.route("/play", methods=["POST"])
 def play_song():
      data = request.json
      song_id = data["song_id"]
-     print(song_id)
      return getSongs()["object"][song_id].play()
 
 

@@ -10,9 +10,10 @@ songs = {
 
 
 class Song():
-    def __init__(self, id, songName, artist):
+    def __init__(self, id, songName, artist, audio):
         self.id = id
         self.songName = songName
+        self.audio = audio
         self.artist = artist
         self.playing = False
         self.visible = True
@@ -20,6 +21,10 @@ class Song():
         return f"Song(name='{self.songName}', artist='{self.artist}')"
     def play(self):
         global currentSong 
+
+        if currentSong != None:
+            currentSong.playing = not currentSong.playing
+
         self.playing = not self.playing
        
         if self.playing:
@@ -46,7 +51,7 @@ def initializeSongs():
 
     for song in songsData:
         data = song.to_dict()
-        songs["object"][song.id] = Song(song.id, data["Name"], data["Artist"]) 
-        songs["dict"][song.id] =  {"Name": data["Name"], "Artist" : data["Artist"] , "Image" : data["Image"]}
+        songs["object"][song.id] = Song(song.id, data["Name"], data["Artist"], data["Audio"]) 
+        songs["dict"][song.id] =  {"Name": data["Name"], "Artist" : data["Artist"] , "Image" : data["Image"] , "Audio" : data["Audio"]}
 
 
