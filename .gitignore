@@ -1,2 +1,2 @@
-serviceAccountKey
-.venv
+serviceAccountKey.json
+.venv/
