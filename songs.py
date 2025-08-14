@@ -1,0 +1,52 @@
+
+from firebase import *
+from flask import Flask, render_template, request, jsonify
+
+currentSong = None
+songs = {
+    "object": {},
+    "dict": {}
+}
+
+
+class Song():
+    def __init__(self, id, songName, artist):
+        self.id = id
+        self.songName = songName
+        self.artist = artist
+        self.playing = False
+        self.visible = True
+    def __repr__(self):
+        return f"Song(name='{self.songName}', artist='{self.artist}')"
+    def play(self):
+        global currentSong 
+        self.playing = not self.playing
+       
+        if self.playing:
+            print("Playing song:", self.id)
+            currentSong = self
+        else:
+            print("Stopped Playing Song:", self.id)
+            currentSong = None
+
+        
+        return jsonify({"status": self.playing, "currentSong": currentSong.id if currentSong != None else None})
+       
+
+def getCurrentSong():
+    return currentSong
+
+def getSongs():
+    print("******GETTING SONGS******")
+    return songs
+
+def initializeSongs():
+    print("******INITIALIZING SONGS******")
+    songsData = getSongData()
+
+    for song in songsData:
+        data = song.to_dict()
+        songs["object"][song.id] = Song(song.id, data["Name"], data["Artist"]) 
+        songs["dict"][song.id] =  {"Name": data["Name"], "Artist" : data["Artist"] , "Image" : data["Image"]}
+
+
