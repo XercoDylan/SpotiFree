@@ -1,5 +1,5 @@
 import { Player } from './player.js';
-export const songs = {}
+export const songs  = {}
 const player = new  Player()
 
 class Song {

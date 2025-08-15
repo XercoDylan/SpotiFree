@@ -20,20 +20,29 @@ const nextButton = document.getElementById("nextBtn");
 const previousButton = document.getElementById("previousBtn");
 const queueButton = document.getElementById("queueBtn");
 const queuePanel = document.getElementById("queuePanel");
+const shuffleButton = document.getElementById("shuffleButton");
+
 export class Player {
     constructor() {
         this.currentSong = null
         this.volume = 50
         this.settings = {
             shuffle: false,
-            repeat: false
+            repeat: false, 
+            queue: true
         }
 
         this.queue = []
         this.previousSong = null
 
+        shuffleButton.addEventListener("click", () => {
+            this.settings.shuffle = !this.settings.shuffle
+            this.updateCurrentSong()
+        })
+
         queueButton.addEventListener("click", () => {
-            queuePanel.classList.toggle("show");
+            this.settings.queue = !this.settings.queue
+            this.updateCurrentSong()
         })
 
         nextButton.addEventListener("click", () => {
@@ -82,6 +91,8 @@ export class Player {
     updateCurrentSong() {
 
 
+        this.updateQueue()
+
         if (this.currentSong != null) {
             playBar.style.visibility = "visible"
             startTime.textContent = formatTime(this.currentSong.audio.currentTime)
@@ -99,10 +110,19 @@ export class Player {
                 repeatButton.setAttribute("class", "btn")
             }
 
+            if (this.settings.queue) {
+                queuePanel.style.visibility = "visible"
+                queueButton.setAttribute("class", "btn primary")
+            } else {
+                queuePanel.style.visibility = "hidden"
+                queueButton.setAttribute("class", "btn")
+            }
+
             if (this.currentSong.audio.currentTime >= this.currentSong.audio.duration) {
                 this.chooseNextSong()
             }
         } else {
+            queuePanel.style.visibility = "hidden"
             playBar.style.visibility = "hidden"
             play_pause_svg.setAttribute("d", svgs["pause"])
         }
@@ -125,6 +145,12 @@ export class Player {
                 const choosenSong = availableSongs[Math.floor(Math.random() * availableSongs.length)]
                 choosenSong.play()
             }
+
+        }
+    }
+
+    updateQueue() {
+        if (this.queue.length < 5) {
 
         }
     }
