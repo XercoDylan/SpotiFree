@@ -14,7 +14,6 @@ function updateSearch(text) {
 export function initializeSearch() {
     console.log("Initializing search")
 
-
     const textbox = document.getElementById("songSearch");
 
     textbox.addEventListener("input", () => {
