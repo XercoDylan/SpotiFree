@@ -16,7 +16,10 @@ const endTime = document.getElementById("totalTime");
 const playbackBar = document.getElementById("playbackBar");
 const volumeBar = document.getElementById("volumeBar");
 const repeatButton = document.getElementById("repeatBtn");
-
+const nextButton = document.getElementById("nextBtn");
+const previousButton = document.getElementById("previousBtn");
+const queueButton = document.getElementById("queueBtn");
+const queuePanel = document.getElementById("queuePanel");
 export class Player {
     constructor() {
         this.currentSong = null
@@ -26,7 +29,22 @@ export class Player {
             repeat: false
         }
 
+        this.queue = []
+        this.previousSong = null
 
+        queueButton.addEventListener("click", () => {
+            queuePanel.classList.toggle("show");
+        })
+
+        nextButton.addEventListener("click", () => {
+            this.chooseNextSong()
+        })
+
+        previousButton.addEventListener("click", () => {
+            if (this.previousSong != null) {
+                this.previousSong.play()
+            }
+        })
 
         repeatButton.addEventListener("click", () => {
             this.settings.repeat = !this.settings.repeat
