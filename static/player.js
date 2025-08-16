@@ -154,15 +154,14 @@ export class Player {
         }
     }
 
-    chooseNextSong(song) {
-        if (song) {
+    async chooseNextSong(song) {
+        if (song != null) {
             this.queue[this.currentQueue] = song
-            song.play()
+            await song.play()
         } else {
             const choosenSong = this.queue[this.currentQueue + 1]
             this.currentQueue += 1
-            choosenSong.play()
-
+            await choosenSong.play()
         }
         this.updateCurrentSong()
     }

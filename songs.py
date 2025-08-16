@@ -43,6 +43,7 @@ def getCurrentSong():
 
 def getSongs():
     print("******GETTING SONGS******")
+    initializeSongs()
     return songs
 
 def initializeSongs():

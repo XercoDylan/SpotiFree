@@ -7,6 +7,7 @@ async function fetchSongs() {
 
 async function init() {
     const songs = await fetchSongs()
+    console.log(songs)
     createSongs(songs)
     initializeSearch()
 }
@@ -14,5 +15,7 @@ async function init() {
 
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("GGGGG")
     init()
 })
+

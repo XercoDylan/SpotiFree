@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upload Song - SpotiFree</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <aside class="sidebar" aria-label="Sidebar">
+    <div class="brand" aria-label="App brand">
+      <div class="brand-logo" aria-hidden="true"></div>
+      <h1>SpotiFree By Xerco</h1>
+    </div>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="/">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg>
+        <span>Home</span>
+      </a>
+    </nav>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="/upload" aria-current="page"> 
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg>
+        <span>Upload</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h2>Upload a New Song</h2>
+    </header>
+
+    <div class="content">
+      <section class="section">
+        <form id="uploadForm" class="upload-form">
+          <div>
+            <label for="songName">Song Name</label>
+            <input type="text" id="songName" name="songName" required />
+          </div>
+
+          <div>
+            <label for="artistName">Artist</label>
+            <input type="text" id="artistName" name="artistName" required />
+          </div>
+
+          <div>
+            <label for="audioFile">Audio File</label>
+            <input type="file" id="audioFile" name="audioFile" accept="audio/*" required />
+          </div>
+
+          <div>
+            <label for="coverImage">Cover Image</label>
+            <input type="file" id="coverImage" name="coverImage" accept="image/*" required />
+          </div>
+
+          <button type="submit">Upload</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="/static/upload.js"></script>
+</body>
+</html>
