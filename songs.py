@@ -35,7 +35,7 @@ class Song():
             currentSong = None
 
         
-        return jsonify({"status": self.playing, "currentSong": currentSong.id if currentSong != None else None})
+        return jsonify({"status": self.playing})
        
 
 def getCurrentSong():

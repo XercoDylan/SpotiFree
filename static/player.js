@@ -20,7 +20,9 @@ const nextButton = document.getElementById("nextBtn");
 const previousButton = document.getElementById("previousBtn");
 const queueButton = document.getElementById("queueBtn");
 const queuePanel = document.getElementById("queuePanel");
+const queueList = document.getElementById("queueList");
 const shuffleButton = document.getElementById("shuffleButton");
+const queueListItems = queueList.querySelectorAll('li');
 
 export class Player {
     constructor() {
@@ -28,15 +30,16 @@ export class Player {
         this.volume = 50
         this.settings = {
             shuffle: false,
-            repeat: false, 
+            repeat: false,
             queue: true
         }
 
         this.queue = []
-        this.previousSong = null
+        this.currentQueue = 0
 
         shuffleButton.addEventListener("click", () => {
             this.settings.shuffle = !this.settings.shuffle
+            this.shuffleQueue()
             this.updateCurrentSong()
         })
 
@@ -50,9 +53,7 @@ export class Player {
         })
 
         previousButton.addEventListener("click", () => {
-            if (this.previousSong != null) {
-                this.previousSong.play()
-            }
+            this.playPreviousSong()
         })
 
         repeatButton.addEventListener("click", () => {
@@ -87,6 +88,14 @@ export class Player {
         })
     }
 
+    shuffleQueue() {
+        for (var i = 1; i < 5; i++) {
+            const choosenSong = songs[Math.floor(Math.random() * songs.length)]
+            this.queue[i] = choosenSong
+        }
+
+        this.updateQueue()
+    }
 
     updateCurrentSong() {
 
@@ -110,6 +119,12 @@ export class Player {
                 repeatButton.setAttribute("class", "btn")
             }
 
+            if (this.settings.shuffle) {
+                shuffleButton.setAttribute("class", "btn primary")
+            } else {
+                shuffleButton.setAttribute("class", "btn")
+            }
+
             if (this.settings.queue) {
                 queuePanel.style.visibility = "visible"
                 queueButton.setAttribute("class", "btn primary")
@@ -130,28 +145,86 @@ export class Player {
 
     }
 
-    chooseNextSong() {
-        if (this.currentSong != null) {
-            if (this.settings.repeat) {
-                this.currentSong.play()
-            } else {
-                const availableSongs = []
-                for (const song_id in songs) {
-                    if (song_id != this.currentSong.id) {
-                        availableSongs.push(songs[song_id])
-                    }
-                }
+    playPreviousSong() {
+        if (this.currentQueue - 1 >= 0) {
+            const choosenSong = this.queue[this.currentQueue - 1]
+            this.currentQueue -= 1
+            choosenSong.play()
+            this.updateCurrentSong()
+        }
+    }
 
-                const choosenSong = availableSongs[Math.floor(Math.random() * availableSongs.length)]
-                choosenSong.play()
-            }
+    chooseNextSong(song) {
+        if (song) {
+            this.queue[this.currentQueue] = song
+            song.play()
+        } else {
+            const choosenSong = this.queue[this.currentQueue + 1]
+            this.currentQueue += 1
+            choosenSong.play()
 
         }
+        this.updateCurrentSong()
     }
 
     updateQueue() {
-        if (this.queue.length < 5) {
+        if ((this.queue.length - this.currentQueue) < 5) {
+            const needSongs = 5 - (this.queue.length - this.currentQueue)
 
+            for (var i = 1; i <= needSongs; i++) {
+
+                if (this.settings.shuffle) {
+                    const choosenSong = songs[Math.floor(Math.random() * songs.length)]
+                    this.queue.push(choosenSong)
+                } else {
+
+                    if (this.queue.length == 0) {
+                        this.queue.push(songs[0])
+                    } else {
+                        const lastSongQueue = this.queue[this.queue.length - 1]
+                        const lastSongIndex = lastSongQueue.index
+
+                        if (lastSongIndex + 1 < songs.length) {
+                            this.queue.push(songs[lastSongIndex + 1])
+                        } else {
+                            this.queue.push(songs[0])
+                        }
+                    }
+
+                }
+            }
         }
+
+        queueListItems.forEach((item, index) => {
+            const song = this.queue[this.currentQueue + index]
+
+            if (song != null) {
+                item.style.visibility = ""
+                item.innerText = song.songName
+
+                const imgElement = item.querySelector('img');
+
+                if (imgElement) {
+                } else {
+                    const newImg = document.createElement('img');
+                    const firstChild = item.firstChild;
+                    newImg.alt = "Album"
+                    newImg.src = song.image
+                    newImg.className = "album-cover1"
+                    item.insertBefore(newImg, firstChild);
+                }
+
+                if (this.currentQueue + index == this.currentQueue) {
+                    item.style.backgroundColor = 'var(--accent)';
+                } else {
+                    item.style.backgroundColor = '';
+                }
+            } else {
+                item.style.visibility = "none"
+            }
+        })
+
     }
 }
+
+

@@ -290,9 +290,17 @@
         place-items: center
     }
 
+    .album-cover1 {
+        max-width: 20%;
+        height: 20%;
+        display: block;
+        border-radius: 8px;
+    }
+
+
     .album-cover {
         max-width: 100%;
-        height: auto;
+        height: 100%;
         display: block;
         border-radius: 8px;
     }
@@ -485,7 +493,7 @@
 
 .queue-panel {
     padding: 20px;
-    width: 230px;
+    width: 100%;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius) var(--radius) 0 0;

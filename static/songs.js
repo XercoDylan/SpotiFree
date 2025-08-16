@@ -1,10 +1,11 @@
 import { Player } from './player.js';
-export const songs  = {}
+export const songs  = []
 const player = new  Player()
 
 class Song {
-    constructor(id, songName, artist, image, audio) {
+    constructor(id, index, songName, artist, image, audio) {
         this.id = id
+        this.index = index
         this.songName = songName
         this.image = image
         this.artist = artist
@@ -45,14 +46,12 @@ class Song {
                     }
                     player.currentSong.audio.currentTime = 0;
                 }
+
+                player.currentSong = this
+                this.update();
+                this.set_volume()
             }
 
-            if (player.currentSong == null || player.currentSong.id != this.id) {
-                player.currentSong = songs[result["currentSong"]] 
-                this.update();
-            } 
-
-            this.set_volume()
         })
         .catch(error => {
             console.error("Error:", error);
@@ -82,8 +81,7 @@ class Song {
     connect_button() {
         const button = document.getElementById(this.id);
         button.addEventListener("click", () => {
-            this.play()
-        
+            player.chooseNextSong(this)
         });
     }
 
@@ -103,21 +101,24 @@ class Song {
 
 function renderSongs() {
     const songsContainer = document.getElementById("songsContainer");
-    for (const song_id in songs) {
-        songs[song_id].updateCard()
-        songs[song_id].connect_button()
+
+    for (let i = 0; i < songs.length; i++) {
+        songs[i].updateCard()
+        songs[i].connect_button()
     }
+
+
 
 }
 
 export function createSongs(songsData) {
-    player.updateCurrentSong()
 
     for (const song_id in songsData) {
-        const song = new Song(song_id, songsData[song_id]["Name"], songsData[song_id]["Artist"], songsData[song_id]["Image"], songsData[song_id]["Audio"] );
-        songs[song_id] = song
+        const song = new Song(song_id,songs.length, songsData[song_id]["Name"], songsData[song_id]["Artist"], songsData[song_id]["Image"], songsData[song_id]["Audio"] );
+        songs.push(song)
     }
-
     renderSongs()
+
+    player.updateCurrentSong()
 }
 
